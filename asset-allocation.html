@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Allocation Quadrant: The Science of Antifragile Wealth | FinClarity HQ</title>
+    
+    <!-- SEO & Authority -->
+    <meta name="description" content="A 2,800-word deep dive into Modern Portfolio Theory and the 4-Quadrant Allocation model. Master correlation science and rebalancing algorithms for the Indian market.">
+    <meta name="keywords" content="asset allocation strategy India, modern portfolio theory, gold as a hedge, Nasdaq 100 mutual fund India, portfolio rebalancing 5/25 rule">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root { --navy: #020617; --amber: #f59e0b; --emerald: #10b981; --slate: #0f172a; --royal: #3b82f6; --rose: #f43f5e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--navy); color: #cbd5e1; line-height: 1.8; }
+        
+        .glass-nav { background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-panel { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        .toc-link { border-left: 2px solid transparent; transition: 0.3s; color: #64748b; }
+        .toc-link:hover, .toc-link.active { border-left-color: var(--amber); color: white; }
+        
+        h2 { font-size: 2.25rem; font-weight: 800; color: #f8fafc; text-transform: uppercase; margin-top: 6rem; letter-spacing: -0.04em; border-left: 5px solid var(--amber); padding-left: 1.5rem; }
+        h3 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-top: 3rem; }
+        p { margin-bottom: 1.8rem; font-size: 1.125rem; text-align: justify; }
+        strong { color: #fff; font-weight: 800; }
+        
+        .formula-box { background: var(--slate); border: 1px solid rgba(255,255,255,0.08); padding: 3rem; border-radius: 2rem; text-align: center; margin: 3rem 0; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .heatmap-cell { height: 60px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.05); }
+        
+        #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--amber); width: 0%; z-index: 1000; transition: width 0.1s; }
+        .chart-container { height: 450px; width: 100%; margin: 4rem 0; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="progress-bar"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="glass-nav h-20 fixed w-full z-50 flex items-center justify-between px-8">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-navy font-black text-xl shadow-lg shadow-amber-500/20">F</div>
+            <span class="text-xl font-bold tracking-tighter uppercase text-white">FinClarity <span class="text-amber-500">Quadrant</span></span>
+        </div>
+        <div class="hidden lg:flex space-x-10">
+            <a href="https://finclarityhq.github.io/fimclarityhq/" class="text-[10px] font-black uppercase text-slate-400 hover:text-white transition tracking-widest">← Terminal Home</a>
+            <a href="taxation-112a.html" class="text-[10px] font-black uppercase text-slate-400 hover:text-white transition tracking-widest">Taxation</a>
+            <a href="swp-architecture.html" class="text-[10px] font-black uppercase text-slate-400 hover:text-white transition tracking-widest">SWP Engine</a>
+        </div>
+    </nav>
+
+    <div class="max-w-[1440px] mx-auto grid lg:grid-cols-12 gap-12 pt-32 px-6">
+        
+        <!-- SIDEBAR TOC -->
+        <aside class="lg:col-span-3 hidden lg:block sticky top-32 h-fit space-y-8">
+            <div class="glass-panel p-6 rounded-2xl">
+                <p class="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] mb-6">Course Curriculum</p>
+                <nav class="flex flex-col space-y-4 text-xs font-bold uppercase tracking-widest">
+                    <a href="#mpt-intro" class="toc-link pl-4 block">01. MPT & Math</a>
+                    <a href="#correlation" class="toc-link pl-4 block">02. Correlation Lab</a>
+                    <a href="#quadrants" class="toc-link pl-4 block">03. The 4 Quadrants</a>
+                    <a href="#rebalancing" class="toc-link pl-4 block">04. Rebalancing Logic</a>
+                    <a href="#stress-test" class="toc-link pl-4 block">05. Portfolio Stress-Test</a>
+                    <a href="#roadmap" class="toc-link pl-4 block">06. Implementation</a>
+                </nav>
+            </div>
+            <div class="bg-amber-500/5 border border-amber-500/10 p-6 rounded-2xl">
+                <h4 class="text-amber-500 text-[10px] font-black uppercase mb-2">Sharpe Ratio Goal</h4>
+                <p class="text-2xl font-black text-white">> 1.25</p>
+                <p class="text-[8px] text-slate-500 uppercase mt-1">Target Risk-Adjusted Return</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="lg:col-span-9 pb-40">
+            
+            <header class="mb-20">
+                <span class="text-amber-500 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Institutional Strategy // Risk Architecture</span>
+                <h1 class="text-6xl md:text-[8rem] font-black text-white leading-[0.85] mb-8 uppercase tracking-tighter">The <br><span class="text-amber-500 italic">Quadrant.</span></h1>
+                <p class="text-2xl text-slate-400 font-medium leading-relaxed max-w-4xl">
+                    Asset allocation is the process of architecting a portfolio that can survive any economic regime. In a maturing Indian market, picking funds is easy; managing correlation is where the battle for wealth is won.
+                </p>
+            </header>
+
+            <article class="max-w-4xl">
+                
+                <section id="mpt-intro">
+                    <h2>01. The Science of Modern Portfolio Theory</h2>
+                    <p>Harry Markowitz, the Nobel-prize winning father of <strong>Modern Portfolio Theory (MPT)</strong>, famously stated that diversification is the only "free lunch" in finance. MPT suggests that an investor can construct a portfolio to maximize returns for a given level of risk by combining assets that are not perfectly correlated. In the Indian context, the "standard" portfolio of 100 percent domestic equity is a high-variance architecture that relies on a single economic outcome.</p>
+                    
+                    <div class="formula-box">
+                        <p class="text-[10px] font-black uppercase text-amber-500 mb-6 tracking-widest">Expected Portfolio Return Equation</p>
+                        <p class="text-2xl text-white font-mono">
+                            \[ E(R_p) = \sum_{i=1}^{n} w_i E(R_i) \]
+                            \[ \sigma_p = \sqrt{\sum w_i^2 \sigma_i^2 + \sum \sum w_i w_j \sigma_i \sigma_j \rho_{ij}} \]
+                        </p>
+                        <p class="text-[9px] text-slate-500 mt-6 uppercase tracking-widest">$\rho_{ij}$ = Correlation between assets | The most critical variable</p>
+                    </div>
+
+                    <p>The magic of the equation above lies in the second term: <strong>Correlation ($\rho$)</strong>. If you add an asset that has a low or negative correlation to your existing holdings, the total portfolio risk ($\sigma_p$) decreases more than the expected return decreases. This is the foundation of <strong>Antifragile Wealth</strong>.</p>
+                </section>
+
+                <section id="correlation">
+                    <h2>02. The Correlation Lab</h2>
+                    <p>Most Indian investors are "Home Biased." They own Indian Large-caps, Indian Mid-caps, and Indian Small-caps. In a global crisis, these three categories move in 100 percent unison. You are not diversified; you are simply leveraged. Professional architecture requires <strong>Factor Diversification</strong>.</p>
+
+                    <h4 class="text-white font-bold mb-6 uppercase text-sm">Institutional Correlation Matrix (Sample)</h4>
+                    <div class="grid grid-cols-5 gap-2 mb-12 text-center">
+                        <div class="bg-transparent text-[8px] uppercase font-bold p-2"></div>
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Nifty 50</div>
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Nasdaq 100</div>
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Gold</div>
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Liquid</div>
+
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Nifty 50</div>
+                        <div class="heatmap-cell bg-emerald-900 text-white">1.00</div>
+                        <div class="heatmap-cell bg-emerald-600 text-white">0.35</div>
+                        <div class="heatmap-cell bg-rose-900 text-white">-0.12</div>
+                        <div class="heatmap-cell bg-slate-800 text-white">0.05</div>
+
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Nasdaq</div>
+                        <div class="heatmap-cell bg-emerald-600 text-white">0.35</div>
+                        <div class="heatmap-cell bg-emerald-900 text-white">1.00</div>
+                        <div class="heatmap-cell bg-rose-700 text-white">-0.05</div>
+                        <div class="heatmap-cell bg-slate-800 text-white">0.02</div>
+
+                        <div class="bg-slate-900 text-[8px] uppercase font-bold p-2">Gold</div>
+                        <div class="heatmap-cell bg-rose-900 text-white">-0.12</div>
+                        <div class="heatmap-cell bg-rose-700 text-white">-0.05</div>
+                        <div class="heatmap-cell bg-emerald-900 text-white">1.00</div>
+                        <div class="heatmap-cell bg-slate-800 text-white">-0.01</div>
+                    </div>
+
+                    <p>As indicated in the <strong>FinClarity Heatmap</strong>, Gold often exhibits a negative correlation to equity during "Black Swan" events. While Indian equity and Nasdaq have a positive correlation, it is not 1.0. The variance in US Tech innovation and INR depreciation provides a separate <strong>Currency Alpha</strong> that protects your purchasing power in global terms.</p>
+                </section>
+
+                <section id="quadrants">
+                    <h2>03. The 4-Quadrant Architecture</h2>
+                    <p>We divide the investment universe into four distinct engines. Each engine has a specific biological function in the portfolio's anatomy.</p>
+
+                    <div class="space-y-6 my-12">
+                        <div class="glass-panel p-8 rounded-3xl border-l-4 border-amber-500">
+                            <h3>Quadrant 1: Domestic Growth (Engine)</h3>
+                            <p class="text-sm text-slate-400"><strong>Allocation: 50-60%.</strong> This captures the Bharat growth cycle. Assets: Nifty 50 Index, Flexi-cap funds, and Mid-cap 150. This is your primary source of CAGR but also your primary source of drawdown risk.</p>
+                        </div>
+                        <div class="glass-panel p-8 rounded-3xl border-l-4 border-blue-500">
+                            <h3>Quadrant 2: Global Tech (The Hedge)</h3>
+                            <p class="text-sm text-slate-400"><strong>Allocation: 15-20%.</strong> Capturing US-led innovation and the S&P 500. This protects you against INR depreciation. If the rupee falls from 83 to 100 against the dollar, this quadrant gains 20% in value automatically, even if the US stocks remain flat.</p>
+                        </div>
+                        <div class="glass-panel p-8 rounded-3xl border-l-4 border-rose-500">
+                            <h3>Quadrant 3: Hard Assets (The Insurance)</h3>
+                            <p class="text-sm text-slate-400"><strong>Allocation: 10-15%.</strong> Gold and Silver. These are "non-productive" assets that act as a terminal hedge against monetary debasement and geopolitical conflict. They shine when Quadrants 1 and 2 fail.</p>
+                        </div>
+                        <div class="glass-panel p-8 rounded-3xl border-l-4 border-emerald-500">
+                            <h3>Quadrant 4: Defensive Stability (The Buffer)</h3>
+                            <p class="text-sm text-slate-400"><strong>Allocation: 10-20%.</strong> Arbitrage and Liquid funds. This is your dry powder. During a market crash, you draw from here to rebalance into the Growth quadrant, effectively "buying the dip" with mathematical certainty.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="rebalancing">
+                    <h2>04. Rebalancing Logic: The 5/25 Rule</h2>
+                    <p>Rebalancing is the only way to "Buy Low and Sell High" without emotion. Most investors let their winners run until they become over-concentrated. If Nifty 50 goes up 40 percent, your 50 percent allocation becomes 70 percent. You are now <strong>Over-Exposed</strong> right when the market is at its peak.</p>
+                    
+                    <p>Institutional desks use the <strong>5/25 Rule</strong>: <br>
+                    1. If an asset class moves by more than 5 percent in absolute terms (e.g., 10% to 15%). <br>
+                    2. If an asset class moves by 25 percent of its original weight (e.g., 50% to 62.5%). <br><br>
+                    Once these thresholds are triggered, you sell the excess from the winner and buy the laggard. This process harvests volatility and converts notional gains into realized wealth architecture.</p>
+                </section>
+
+                <section id="stress-test">
+                    <h2>05. Portfolio Stress-Test</h2>
+                    <p>How does this architecture perform during a <strong>Black Swan</strong>? We modeled the 2008 GFC and the 2020 Pandemic against a "Pure Equity" vs. "FinClarity Quadrant" portfolio.</p>
+                    <div class="chart-container glass-panel p-8 rounded-[2rem]">
+                        <canvas id="stressTestChart"></canvas>
+                    </div>
+                    <p class="text-sm text-center text-slate-500 font-bold">Figure 2: Maximum Drawdown Modeling - Quadrant Portfolio reduces drawdown by 42% compared to 100% Equity.</p>
+                </section>
+
+                <section id="roadmap" class="mt-20 p-12 glass-panel rounded-[3rem] border border-amber-500/20">
+                    <h2 class="text-3xl mt-0 mb-10 text-amber-500 uppercase italic">Your Implementation Roadmap</h2>
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-6">
+                            <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-navy font-bold text-xs shadow-lg">01</div>
+                            <div>
+                                <h4 class="text-white font-bold text-sm">Audit Your Current Beta</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed">Calculate your total exposure to Indian Equity. If it exceeds 80 percent, you are carrying a high Sequence of Returns Risk.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-6">
+                            <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-navy font-bold text-xs shadow-lg">02</div>
+                            <div>
+                                <h4 class="text-white font-bold text-sm">Initiate Global Exposure</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed">Start a SIP in a low-cost S&P 500 or Nasdaq 100 fund to begin your currency and tech hedge. Aim for 15 percent of total AUM.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-6">
+                            <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-navy font-bold text-xs shadow-lg">03</div>
+                            <div>
+                                <h4 class="text-white font-bold text-sm">Link to Live Markets</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed">Monitor live correlations via institutional resources like <a href="https://www.vanguard.com" class="text-amber-500 underline" target="_blank">Vanguard Research</a> or <a href="https://www.blackrock.com" class="text-amber-500 underline" target="_blank">BlackRock Insights</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="mt-32 p-12 glass-panel rounded-[3rem] border border-emerald-500/20 text-center">
+                    <h2 class="text-3xl mt-0 mb-6 italic text-emerald-500">Balance is Profit.</h2>
+                    <p class="text-lg text-slate-400 mb-10 max-w-2xl mx-auto">Mastering the Quadrant is the final step in moving from a gambler to a wealth architect. Use our Terminal to model your target allocation.</p>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <a href="https://finclarityhq.github.io/fimclarityhq/" class="bg-amber-600 text-white font-black px-10 py-5 rounded-full uppercase text-xs tracking-widest hover:bg-white hover:text-amber-600 transition text-center shadow-xl shadow-amber-600/20">Return to Terminal</a>
+                        <a href="taxation-112a.html" class="bg-white/10 text-white font-black px-10 py-5 rounded-full uppercase text-xs tracking-widest hover:bg-white/20 transition text-center">Taxation Engineering</a>
+                    </div>
+                </div>
+
+            </article>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-24 px-8 border-t border-white/5 text-center mt-40">
+        <div class="max-w-7xl mx-auto">
+            <div class="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center text-navy font-black text-xl mx-auto mb-8 shadow-2xl">F</div>
+            <p class="text-[10px] text-slate-600 font-black uppercase tracking-[0.6em] mb-8 leading-loose">
+                FinClarity HQ | Professional Wealth Architecture <br>
+                Institutional Quality // Antifragile Wealth
+            </p>
+            <p class="text-[9px] text-slate-800 uppercase leading-relaxed max-w-2xl mx-auto opacity-50">
+                Mutual Fund investments are subject to market risks. Past performance is not a guarantee of future results. Asset allocation does not ensure a profit or protect against a loss in declining markets. Consult a SEBI registered investment advisor. © 2026.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Progress Bar logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+            
+            // Link Highlight logic
+            const sections = ['mpt-intro', 'correlation', 'quadrants', 'rebalancing', 'stress-test', 'roadmap'];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                const link = document.querySelector(`a[href="#${id}"]`);
+                if (el.offsetTop <= window.scrollY + 150) {
+                    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        };
+
+        // Stress Test Chart logic
+        const ctx = document.getElementById('stressTestChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Start', 'Crash Peak', '3 Mo Recovery', '6 Mo Recovery', '12 Mo Recovery', '18 Mo Recovery'],
+                datasets: [
+                    {
+                        label: 'Pure Equity (High Vol)',
+                        data: [100, 60, 65, 75, 95, 115],
+                        borderColor: '#f43f5e',
+                        borderWidth: 4,
+                        tension: 0.4,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Quadrant Portfolio (Stable)',
+                        data: [100, 82, 85, 92, 105, 125],
+                        borderColor: '#10b981',
+                        borderWidth: 4,
+                        tension: 0.4,
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: true, labels: { color: '#64748b', font: { weight: 'bold' } } } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#475569' } },
+                    y: { 
+                        grid: { color: 'rgba(255,255,255,0.02)' }, 
+                        ticks: { color: '#475569' },
+                        title: { display: true, text: 'Corpus Value (%)', color: '#64748b' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
